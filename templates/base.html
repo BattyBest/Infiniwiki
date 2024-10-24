@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid d-flex justify-content-between">
+            <a class="navbar-brand" href="/">Infiniwiki</a>
+            <div class="d-flex flex-row justify-content-end">
+                <button
+                    style="padding: 1em; width: 0; height: 0; --bs-btn-bg: var(--bs-body-bg); --bs-btn-hover-bg: var(--opposite-bg-color);"
+                    onclick="switchTheme();" type="button" class="btn btn-info rounded-circle btn-lg m-2"></button>
+                <li class="nav-item dropdown m-3">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if current_user.is_authenticated %}{{current_user.username}} {% else %}Not signed in {% endif
+                        %}
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if current_user.is_authenticated %}
+                        <li><a class="dropdown-item" href="/logout/"><p>Logout</p></a></li>
+                        <li><p><span id="generations-viewer"></span> Gens left</p></li>
+                        <script>
+                            function refreshGenKeyView()
+                            {
+                                $.ajax({
+                                    url: "/api/current_user_gen_keys",
+                                    success: (data) => {
+                                        $("#generations-viewer")[0].innerHTML = data;
+                                    }
+                                })
+                            }
+                            setInterval(refreshGenKeyView, 4000);
+                            refreshGenKeyView();
+                        </script>
+                        {% if current_user.username == "Admin" %}
+                        <li><a class="dropdown-item" href="/config/"><p>Config</p></a></li>
+                        {% endif %}
+                        {% else %}
+                        <li><a class="dropdown-item" href="/register/"><p>Register</p></a></li>
+                        <li><a class="dropdown-item" href="/login/"><p>Login</p></a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+                <div style="margin-left: 100px"></div>
+            </div>
+        </div>
+    </nav>
+    <script>
+        if (window.localStorage.getItem("theme") === null) {
+            setTheme("light");
+        }
+        function setTheme(themestr) {
+            window.localStorage.setItem("theme", themestr);
+            resetTheme();
+        }
+        function switchTheme() {
+            setTheme(window.localStorage.getItem("theme") === "light" ? "dark" : "light");
+        }
+        function resetTheme() {
+            $("html")[0].setAttribute('data-bs-theme', window.localStorage.getItem("theme"));
+        }
+        resetTheme();
+    </script>
+    <br />
+    {% block content %}
+    {% endblock %}
+</body>
+
+</html>

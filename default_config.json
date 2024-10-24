@@ -1,0 +1,14 @@
+{
+    "secret_key": "super secret sauce",
+    "AIModels": {
+        "url": "http://localhost:1234/v1/",
+        "key": "super secret key",
+        "thinker_model": "model/my very smart model",
+        "coder_model": "model/my very smart coding model",
+        "refiner_model": "model/my very fast model"
+    },
+    "need_login_for_gen": false,
+    "max_gen_store": 5,
+    "regen_interval_minutes": 360,
+    "start_with_gens": 1
+}

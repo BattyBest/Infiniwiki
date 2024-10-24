@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Infiniwiki{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Infiniwiki!</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <p>Welcome to Infiniwiki.</p>
+    {% if current_user.is_authenticated %}
+    <p>Logged in as {{current_user.username}}!</p><br />
+    <a class="btn btn-secondary" href="/logout/">Logout</a><br />
+    {% else %}
+    <a class="btn btn-secondary" href="/register/">Make an account</a>
+    <a class="btn btn-secondary" href="/login/">Login</a><br />
+    {% endif %}
+    <div><a href="/page/random">This link goes to page that has a random topic each time its generated.</a>
+        <p> Useful for exploring something new.</p>
+    </div>
+    <p> Alrernatively, use this search bar: </p>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Type any subject here!" aria-label="Page title"
+            id="page-searcher">
+        <div class="input-group-append">
+            <button class="input-group-text" onclick="goPage($('#page-searcher')[0].value)">Go!</span>
+        </div>
+    </div>
+    <br />
+    <p>Next Generation Keys are in: <p style="color:var(--special-text-color)" id="next-gen-keys"></p></p>
+    <script>
+        function refreshGenKeys()
+        {
+            $.ajax({
+                url: "/api/next_gen_keys",
+                success: (data) => {
+                    $("#next-gen-keys")[0].innerHTML = data;
+                }
+            })
+        }
+        setInterval(refreshGenKeys, 1000);
+        refreshGenKeys();
+    </script>
+</div>
+<script>
+    function goPage(string) {
+        window.location.pathname = "/page/" + string;
+    }
+</script>
+{% endblock %}

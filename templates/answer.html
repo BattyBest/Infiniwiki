@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Generating Page{% endblock %}
+{% block content %}
+<h1>{{pagestr}}</h1>
+<p>The page is generating (even if all you see is a white page)! Here is its progress:</p>
+<br />
+<br />
+<iframe id="response" src="/generating/"
+    onload="this.style.display = 'block'; if (this.contentDocument.body.innerHTML === 'Generated!!') {window.location.replace('/page/' + $('h1')[0].innerHTML)};resizeIframe(this)"></iframe>
+<script>
+    $("#response")[0].src = "/generating/" + $("h1")[0].innerHTML;
+    function getNewGening() {
+        $("#response")[0].style.display = 'none';
+        $("#response")[0].src = $("#response")[0].src;
+    }
+    function resizeIframe(obj) {
+        obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+    }
+    setInterval(getNewGening, 2000);
+</script>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Infiniwiki User Portal{% endblock %}
+{% block content %}
+<div class="container"> <!-- Stolen from freecodecamp.org -->
+    <!-- The original code is on github @ ondiekelijah/User-Authentication-in-Flask; licensed under MIT. This credit is included not out of legality but because its bad to freeload. -->
+    <div class="row mt-4">
+        <form action="{{ request.path }}" method="POST" class="card-body">
+            {{ form.csrf_token }}
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <div class="text-center">
+                <h2>Infiniwiki User{% if request.path == '/register/' %} Registry {% endif %}{% if request.path == '/login/' %} Login {% endif %}Portal</h2>
+                <h5 class="text-primary">{{ text }}</h5>
+            </div>
+
+            <div class="form-group mb-3">
+                {{ form.username(class_="form-control",placeholder="Username")}}
+            </div>
+            {% for error in form.username.errors %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor%}
+            <div class="form-group mb-3">
+                {{ form.pwd(class_="form-control",placeholder="Password")}}
+            </div>
+            {% for error in form.pwd.errors %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div> {% endfor%}
+            {% if request.path == '/register/' %}
+            <div class="form-group mb-3">
+                {{ form.cpwd(class_="form-control",placeholder="Confirm Password")}}
+            </div>
+            {% for error in form.cpwd.errors %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div> {% endfor%}
+            {% endif %}
+            <div class="text-center">
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-block btn-primary mb-3"> Submit </button>
+                </div>
+
+                <p>
+                    <a href="/">Go back</a>
+                </p>
+
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

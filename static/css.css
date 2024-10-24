@@ -1,0 +1,55 @@
+iframe {
+    width: 100%;
+    display: none;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+html {
+    margin: auto;
+}
+
+h1,
+p,
+ul {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar {
+    background-size: 300%;
+    background-image: repeating-linear-gradient(95deg, --bs-body-color, --bs-body-bg);
+    animation: 10s linear 0s alternate cyclecolor;
+}
+
+@keyframes cyclecolor {
+    0% {
+        background-position-x: 0%;
+    }
+
+    100% {
+        background-position-x: 200%;
+    }
+}
+
+[data-bs-theme=light] {
+    --opposite-bg-color: black;
+    --special-text-color: darkcyan;
+}
+
+[data-bs-theme=dark] {
+    --opposite-bg-color: white;
+    --special-text-color: aquamarine;
+}
+
+body {
+    background-image: repeating-linear-gradient(122deg, --bs-body-bg, --bs-body-color);
+}
+
+.fade {
+    opacity: 100 !important;
+}

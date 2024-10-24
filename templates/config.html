@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Infiniwiki{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Infiniwiki config</h1>
+    <h5>This link is not accesible by anyone not signed into the admin account!</h5>
+    <form action="#" method="POST" class="card-body">
+        <label for="secret_key">Secret key:</label><br />
+        <input class="form-control" type="text" id="secret_key" name="secret_key"><br />
+        <p class="text-center"> Your flask secret key. Make this something incredibly long and randomly and
+            cryptographically generated. Also note this is stored in plaintext. </p>
+        <br /> <br />
+        <h4>AI Model Info</h4>
+        <label for="AIModelssuburl">Server URL:</label><br />
+        <input class="form-control" type="text" id="AIModelssuburl" name="AIModelssuburl"><br />
+        <p class="text-center"> URL to your OpenAI-api compatible server host. (Ex. http://localhost:1234/v1 for LM
+            Studio) </p>
+        <label for="AIModelssubkey">Server key:</label><br />
+        <input class="form-control" type="text" id="AIModelssubkey" name="AIModelssubkey"><br />
+        <p class="text-center"> Key to your OpenAI-api compatible server host. (Ex. 'lm-studio' for LM
+            Studio) </p>
+        <label for="AIModelssubthinker_model">Thinker Model:</label><br />
+        <input class="form-control" type="text" id="AIModelssubthinker_model" name="AIModelssubthinker_model"><br />
+        <p class="text-center"> The AI model that will be doing the initial thinking stage and further additions; should
+            be creative. Context size is unimportant. Meta LLama is reccomended. </p>
+        <label for="AIModelssubcoder_model">Coder Model:</label><br />
+        <input class="form-control" type="text" id="AIModelssubcoder_model" name="AIModelssubcoder_model"><br />
+        <p class="text-center"> The AI model that will be doing most of the coding. Should be reasonably intelligent and
+            preferrably fast. CodeQwen is reccomended. </p>
+        <label for="AIModelssubrefiner_model">Refiner Model:</label><br />
+        <input class="form-control" type="text" id="AIModelssubrefiner_model" name="AIModelssubrefiner_model"><br />
+        <p class="text-center"> The AI model that will be doing quick tag summarization. No musts but faster is better.
+            Phi 3 mini is reccomended. </p>
+        <label for="need_login_for_gen">Require users to be logged in to generate pages?</label>
+        <input type="checkbox" id="need_login_for_gen" name="need_login_for_gen">
+        <br />
+        <label for="regen_interval_minutes">Regen 1 generation key in ... minutes for all users (Restart needed to take effect):</label>
+        <input type="number" step="1" id="regen_interval_minutes" name="regen_interval_minutes">
+        <br />
+        <label for="max_gen_store">Maximum gen key store for users:</label>
+        <input type="number" step="1" min="0" id="max_gen_store" name="max_gen_store">
+        <br />
+        <label for="start_with_gens">Users start with ... gens:</label>
+        <input type="number" step="1" min="0" id="start_with_gens" name="start_with_gens">
+        <br />
+        <br />
+        <div class="text-center">
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-block btn-primary mb-3"> Confirm Changes </button>
+            </div>
+
+            <p>
+                <a href="/">Go back</a>
+            </p>
+
+        </div>
+    </form>
+</div>
+<script>
+    // @ts-ignore
+    config_obj = JSON.parse('{{ json| tojson }}');
+    function recursive_write(prefix, subjson) {
+        for (var key in subjson) {
+            if (typeof subjson[key] === 'object') {
+                recursive_write(prefix + key + "sub", subjson[key]);
+            } else {
+                $("#" + prefix + key)[0].value = subjson[key];
+                if ($("#" + prefix + key)[0].getAttribute("type") === "checkbox") {
+                    $("#" + prefix + key)[0].checked = subjson[key] // Checkboxes!!!!!! AARGHH!!!
+                }
+            }
+        }
+    }
+    recursive_write("", config_obj);
+</script>
+{% endblock %}
