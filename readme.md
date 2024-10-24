@@ -29,4 +29,4 @@ Upon first startup, Infiniwiki will generate 3 files: a config file, a saved sit
 
 - HTTPS is not enabled by default. Edit the nginx config to enable it.
 - If you are running the AI models locally, make sure the system prompt in your server is empty.
-- This system sources bootstrap from MaxCDN. CDN's are generally regarded as bad practice; download it and enable local-sourcing in the settings.
+- This system sources bootstrap from MaxCDN. CDN's are generally regarded as bad practice; download it and enable local-sourcing in the template files.
